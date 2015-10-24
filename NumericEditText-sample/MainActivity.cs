@@ -25,10 +25,17 @@ namespace NumericEditTextsample
 			// Get our button from the layout resource,
 			// and attach an event to it
 			Button button = FindViewById<Button> (Resource.Id.myButton);
+			Button button2 = FindViewById<Button> (Resource.Id.myButton2);
 			NumericEditText txtNumeric = FindViewById<NumericEditText> (Resource.Id.txtNumeric);
+			NumericEditText txtNumericConstrained = FindViewById<NumericEditText> (Resource.Id.txtNumericConstrained);
 			
 			button.Click += delegate {
 				double value = txtNumeric.GetNumericValue();
+				Toast.MakeText(this, value.ToString(), ToastLength.Long).Show();
+			};
+
+			button2.Click += delegate {
+				double value = txtNumericConstrained.GetNumericValue();
 				Toast.MakeText(this, value.ToString(), ToastLength.Long).Show();
 			};
 		}

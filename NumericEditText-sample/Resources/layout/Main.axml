@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:num="http://schemas.android.comas/apk/res-auto"
+    xmlns:num="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -14,4 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Get Value" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Max 6 numbers before decimal point, 4 after decimal point" />
+    <br.com.akamud.NumericEditText
+        android:id="@+id/txtNumericConstrained"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number|numberDecimal"
+        num:maxDigitsBeforeDecimal="6"
+        num:maxDigitsAfterDecimal="4" />
+    <Button
+        android:id="@+id/myButton2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Value 2" />
 </LinearLayout>

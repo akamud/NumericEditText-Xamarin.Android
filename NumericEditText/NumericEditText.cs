@@ -56,7 +56,7 @@ namespace Akamud.Numericedittext
 
         private void InitAttrs(Context context, IAttributeSet attrs, int defStyleAttr)
         {
-			TypedArray attributes = context.Theme.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
+			TypedArray attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
 
             try
             {
