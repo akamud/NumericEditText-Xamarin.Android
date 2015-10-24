@@ -19,6 +19,7 @@ Then you can just use the component like so:
 ```
 
 By default it uses 2 decimal digits and (virtually) infinite number digits, but you can change it to whatever you need using two attributes:  
+
 Attribute | Description | Default Value  
 :----: | :-------: | :---------:  
 maxDigitsBeforeDecimal | Sets the maximum number of digits before the decimal point | 0 (infinite)   
