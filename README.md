@@ -2,7 +2,7 @@
 A NumericEditText for Xamarin.Android that accepts decimal numbers that work with any culture
 
 ## Motivation
-The original Android EditText has this annoying bug when used with `inputType=number|numberDecimal`, it won't work for different cultures that use different decimal separators (like pt-BR's , (comma)), so you can't have it accept 105,60 as a valid number.
+The original Android EditText has this annoying bug when used with `inputType=number|numberDecimal`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
 
 This project is based on two other projects:  
 [Android-NumberEditText](https://github.com/hyperax/Android-NumberEditText) by [@hyperax](https://github.com/hyperax)  
