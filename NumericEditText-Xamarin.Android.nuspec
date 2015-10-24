@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>NumericEditText-Xamarin.Android</id>
+        <version>1.0.0</version>
+        <title>NumericEditText-Xamarin.Android</title>
+        <authors>Mahmoud Ali</authors>
+        <owners>Mahmoud Ali</owners>
+        <licenseUrl>https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/akamud/NumericEditText-Xamarin.Android</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A NumericEditText for Xamarin.Android that accepts decimal numbers that work with any culture
+
+It will automatically get the phone's language using CultureInfo.CurrentCulture to figure out which characters to use as CurrencyGroupSeparator and NumberDecimalSeparator and automatically add them as you type.</description>
+        <summary>A NumericEditText for Xamarin.Android that accepts decimal numbers that work with any culture</summary>
+        <tags>xamarin xamarin-android</tags>
+    </metadata>
+    <files>
+        <file src="NumericEditText\bin\Release\NumericEditText.dll" target="lib\MonoAndroid\NumericEditText.dll" />
+    </files>
+</package>
