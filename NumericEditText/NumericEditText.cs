@@ -21,13 +21,13 @@ namespace Akamud.Numericedittext
     [Register("br.com.akamud.NumericEditText")]
     public class NumericEditText : EditText
     {
-        private string GROUPING_SEPARATOR = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
-        private string DECIMAL_SEPARATOR = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        private const string LEADING_ZERO_FILTER_REGEX = "^0+(?!$)";
+		private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
+		private string gecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		private const string LeadingZeroFilterRegex = "^0+(?!$)";
         private const int DefaultDigitsBeforeDecimal = 0;
         private const int DefaultDigitsAfterDecimal = 2;
-        private int MaxDigitsBeforeDecimal;
-        private int MaxDigitsAfterDecimal;
+		private int maxDigitsBeforeDecimal;
+		private int maxDigitsAfterDecimal;
 
         private string defaultText = null;
         private string previousText = "";
@@ -60,8 +60,8 @@ namespace Akamud.Numericedittext
 
             try
             {
-				MaxDigitsBeforeDecimal = atributos.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
-				MaxDigitsAfterDecimal = atributos.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
+				maxDigitsBeforeDecimal = atributos.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
+				maxDigitsAfterDecimal = atributos.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
             }
             finally
             {
@@ -71,7 +71,7 @@ namespace Akamud.Numericedittext
 
         private void InitComponent()
         {
-            numberFilterRegex = "[^\\d\\" + DECIMAL_SEPARATOR + "]";
+            numberFilterRegex = "[^\\d\\" + gecimalSeparator + "]";
             AfterTextChanged += TextChangedHandler;
             Click += (object sender, EventArgs e) => {
                 SetSelection(Text.Length);
@@ -83,23 +83,23 @@ namespace Akamud.Numericedittext
         {
             string novoTexto = e.Editable.ToString();
 
-            int posicaoCasaDecimal = e.Editable.ToString().IndexOf(DECIMAL_SEPARATOR);
+            int posicaoCasaDecimal = e.Editable.ToString().IndexOf(gecimalSeparator);
             if (posicaoCasaDecimal > 0)
             {
-                if (novoTexto.Substring(posicaoCasaDecimal).IndexOf(GROUPING_SEPARATOR) > 0)
+                if (novoTexto.Substring(posicaoCasaDecimal).IndexOf(groupingSeparator) > 0)
                 {
                     DiscardInput(previousText);
                     return;
                 }
             }
 
-            if (novoTexto.Length == 1 && novoTexto == DECIMAL_SEPARATOR)
+            if (novoTexto.Length == 1 && novoTexto == gecimalSeparator)
             {
                 DiscardInput(previousText);
                 return;
             }
 
-            string[] splitText = novoTexto.Split(DECIMAL_SEPARATOR.ToCharArray());
+            string[] splitText = novoTexto.Split(gecimalSeparator.ToCharArray());
             string leftPart = splitText[0];
             string rightPart = null;
             if (splitText.Length > 1)
@@ -107,13 +107,13 @@ namespace Akamud.Numericedittext
                 rightPart = splitText[1];
             }
 
-            if (MaxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(GROUPING_SEPARATOR, "").Length > MaxDigitsBeforeDecimal)
+            if (maxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(groupingSeparator, "").Length > maxDigitsBeforeDecimal)
             {
                 DiscardInput(previousText);
                 return;
             }
 
-            if (rightPart != null && rightPart.Length > MaxDigitsAfterDecimal)
+            if (rightPart != null && rightPart.Length > maxDigitsAfterDecimal)
             {
                 DiscardInput(previousText);
                 return;
@@ -123,7 +123,7 @@ namespace Akamud.Numericedittext
             {
                 string ultimoCaractere = novoTexto[novoTexto.Length - 1].ToString();
                 string penultimoCaractere = novoTexto[novoTexto.Length - 2].ToString();
-                if (ultimoCaractere == DECIMAL_SEPARATOR || ultimoCaractere == GROUPING_SEPARATOR)
+                if (ultimoCaractere == gecimalSeparator || ultimoCaractere == groupingSeparator)
                 {
                     if (ultimoCaractere == penultimoCaractere)
                     {
@@ -133,7 +133,7 @@ namespace Akamud.Numericedittext
                 }
             }
 
-            if (CountMatches(e.Editable.ToString(), DECIMAL_SEPARATOR.ToString()) > 1)
+            if (CountMatches(e.Editable.ToString(), gecimalSeparator.ToString()) > 1)
             {
                 DiscardInput(previousText);
                 return;
@@ -216,17 +216,17 @@ namespace Akamud.Numericedittext
 
         private string Format(string original)
         {
-            string[] parts = original.Split(DECIMAL_SEPARATOR.ToCharArray());
+            string[] parts = original.Split(gecimalSeparator.ToCharArray());
             String number = Regex.Replace(parts[0], numberFilterRegex, "");
-            number = ReplaceFirst(number, LEADING_ZERO_FILTER_REGEX, "");
+            number = ReplaceFirst(number, LeadingZeroFilterRegex, "");
 
-            number = Reverse(Regex.Replace(Reverse(number), "(.{3})", "$1" + GROUPING_SEPARATOR));
+            number = Reverse(Regex.Replace(Reverse(number), "(.{3})", "$1" + groupingSeparator));
 
-            number = RemoveStart(number, GROUPING_SEPARATOR.ToString());
+            number = RemoveStart(number, groupingSeparator.ToString());
 
             if (parts.Length > 1)
             {
-                number += DECIMAL_SEPARATOR + parts[1];
+                number += gecimalSeparator + parts[1];
             }
 
             return number;
