@@ -21,34 +21,34 @@ namespace Akamud.Numericedittext
     [Register("br.com.akamud.NumericEditText")]
     public class NumericEditText : EditText
     {
-		private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
-		private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-		private const string LeadingZeroFilterRegex = "^0+(?!$)";
+        private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
+        private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        private const string LeadingZeroFilterRegex = "^0+(?!$)";
         private const int DefaultDigitsBeforeDecimal = 0;
         private const int DefaultDigitsAfterDecimal = 2;
-		private int maxDigitsBeforeDecimal;
-		private int maxDigitsAfterDecimal;
+        private int maxDigitsBeforeDecimal;
+        private int maxDigitsAfterDecimal;
 
         private string defaultText = null;
         private string previousText = "";
         private string numberFilterRegex = "";
 
         public NumericEditText(Context context)
-            :base(context) 
+            : base(context)
         {
             InitAttrs(context, null, 0);
             InitComponent();
         }
 
         public NumericEditText(Context context, IAttributeSet attrs)
-            :base(context, attrs) 
+            : base(context, attrs)
         {
             InitAttrs(context, attrs, 0);
             InitComponent();
         }
 
         public NumericEditText(Context context, IAttributeSet attrs, int defStyleAttr)
-			:base(context, attrs, defStyleAttr) 
+            : base(context, attrs, defStyleAttr)
         {
             InitAttrs(context, attrs, defStyleAttr);
             InitComponent();
@@ -56,14 +56,13 @@ namespace Akamud.Numericedittext
 
         private void InitAttrs(Context context, IAttributeSet attrs, int defStyleAttr)
         {
-			TypedArray attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
+            TypedArray attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
 
             try
             {
-				maxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
-				maxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
-            }
-            finally
+                maxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
+                maxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
+            } finally
             {
                 attributes.Recycle();
             }
@@ -81,9 +80,9 @@ namespace Akamud.Numericedittext
 
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
         {
-			string newText = e.Editable.ToString();
+            string newText = e.Editable.ToString();
 
-			int decimalPointPosition = e.Editable.ToString().IndexOf(decimalSeparator);
+            int decimalPointPosition = e.Editable.ToString().IndexOf(decimalSeparator);
             if (decimalPointPosition > 0)
             {
                 if (newText.Substring(decimalPointPosition).IndexOf(groupingSeparator) > 0)
@@ -121,8 +120,8 @@ namespace Akamud.Numericedittext
 
             if (newText.Length > 2)
             {
-				string lastChar = newText[newText.Length - 1].ToString();
-				string secToLastChar = newText[newText.Length - 2].ToString();
+                string lastChar = newText[newText.Length - 1].ToString();
+                string secToLastChar = newText[newText.Length - 2].ToString();
                 if (lastChar == decimalSeparator || lastChar == groupingSeparator)
                 {
                     if (lastChar == secToLastChar)
@@ -165,7 +164,7 @@ namespace Akamud.Numericedittext
         private void HandleNumericValueChanged()
         {
             previousText = Text.ToString();
-			// TODO: Add events for numberchanged
+            // TODO: Add events for numberchanged
         }
 
         public void SetDefaultNumericValue(double defaultNumericValue, string defaultNumericFormat)
@@ -197,8 +196,7 @@ namespace Akamud.Numericedittext
             try
             {
                 return NumberFormat.Instance.Parse(original).DoubleValue();
-            }
-            catch (ParseException)
+            } catch (ParseException)
             {
                 return Double.NaN;
             }
@@ -264,8 +262,7 @@ namespace Akamud.Numericedittext
             if (lastIndex < 0)
             {
                 return 0;
-            }
-            else
+            } else
             {
                 return 1 + CountMatches(str.Substring(0, lastIndex), sub);
             }
