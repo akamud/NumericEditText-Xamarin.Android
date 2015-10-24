@@ -63,6 +63,13 @@ Output:
 100000.00
 ```
 
+## Gif examples
+### en-US culture:
+![en-US gif](https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/enus-sample.gif)
+
+### pt-BR culture:
+![pt-BR gif](https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/ptbr-sample.gif)
+
 ## Motivation
 The original Android EditText has this annoying bug when used with `inputType=number|numberDecimal`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
 
