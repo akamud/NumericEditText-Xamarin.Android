@@ -43,7 +43,7 @@ maxDigitsAfterDecimal | Sets the maximum number of digits after the decimal poin
 
 To get the number typed without mask you can use the method `GetNumericValue()`:
 ```C#
-double value = txtNumeric.GetNumericValue();
+double number = txtNumeric.GetNumericValue();
 ```
 
 ### Examples  
