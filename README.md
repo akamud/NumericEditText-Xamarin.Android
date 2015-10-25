@@ -3,7 +3,13 @@ A NumericEditText for Xamarin.Android that accepts decimal numbers that work wit
 
 It will automatically get the phone's language using `CultureInfo.CurrentCulture` to figure out which characters to use as `CurrencyGroupSeparator` and `NumberDecimalSeparator` and automatically add them as you type.
 
-## Usage
+## Installing
+[NuGet package](https://www.nuget.org/packages/NumericEditText-Xamarin.Android/) available:
+```
+PM> Install-Package NumericEditText-Xamarin.Android
+```
+
+## Using
 Add the `res-auto` namespace:
 ```XML
 xmlns:num="http://schemas.android.comas/apk/res-auto"
@@ -71,7 +77,7 @@ Output:
 ![pt-BR gif](https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/ptbr-sample.gif)
 
 ## Motivation
-The original Android EditText has this annoying bug when used with `inputType=number|numberDecimal`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
+The original Android EditText has this annoying bug when used with `inputType="number|numberDecimal"`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
 
 This project is based on two other projects:  
 [Android-NumberEditText](https://github.com/hyperax/Android-NumberEditText) by [@hyperax](https://github.com/hyperax)  
