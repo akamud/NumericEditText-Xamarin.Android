@@ -4,6 +4,7 @@ A NumericEditText for Xamarin.Android that accepts decimal numbers that work wit
 It will automatically get the phone's language using `CultureInfo.CurrentCulture` to figure out which characters to use as `CurrencyGroupSeparator` and `NumberDecimalSeparator` and automatically add them as you type.
 
 ## Installing
+![](https://img.shields.io/nuget/v/NumericEditText-Xamarin.Android.svg?style=flat)  
 [NuGet package](https://www.nuget.org/packages/NumericEditText-Xamarin.Android/) available:
 ```
 PM> Install-Package NumericEditText-Xamarin.Android
