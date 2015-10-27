@@ -78,7 +78,7 @@ Output:
 ![pt-BR gif](https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/ptbr-sample.gif)
 
 ## Motivation
-The original Android EditText has this annoying bug when used with `inputType="number|numberDecimal"`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
+The original Android EditText has [this annoying bug](https://code.google.com/p/android/issues/detail?id=2626) when used with `inputType="number|numberDecimal"`, it won't work for different cultures that use different decimal separators (like pt-BR's `,` (comma)), so you can't have it accept `105,60` as a valid number.
 
 This project is based on two other projects:  
 [Android-NumberEditText](https://github.com/hyperax/Android-NumberEditText) by [@hyperax](https://github.com/hyperax)  
