@@ -8,6 +8,7 @@
         <owners>Mahmoud Ali</owners>
         <licenseUrl>https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/akamud/NumericEditText-Xamarin.Android</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/akamud/NumericEditText-Xamarin.Android/master/art/Icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A NumericEditText for Xamarin.Android that accepts decimal numbers that work with any culture
 
