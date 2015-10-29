@@ -38,6 +38,15 @@ namespace NumericEditTextsample
 				double value = txtNumericConstrained.GetNumericValue();
 				Toast.MakeText(this, value.ToString(), ToastLength.Long).Show();
 			};
+
+            txtNumeric.NumericValueCleared += (object sender, NumericValueClearedEventArgs e) => { 
+                // Value cleared
+            };
+
+            txtNumeric.NumericValueChanged += (object sender, NumericValueChangedEventArgs e) => { 
+                double newValue = e.NewValue;
+                // New value
+            };
 		}
 	}
 }

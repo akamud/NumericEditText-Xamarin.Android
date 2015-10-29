@@ -33,6 +33,9 @@ namespace Akamud.Numericedittext
         private string previousText = "";
         private string numberFilterRegex = "";
 
+        public event EventHandler<NumericValueChangedEventArgs> NumericValueChanged;
+        public event EventHandler<NumericValueClearedEventArgs> NumericValueCleared;
+
         public NumericEditText(Context context)
             : base(context)
         {
@@ -158,13 +161,17 @@ namespace Akamud.Numericedittext
         private void HandleNumericValueCleared()
         {
             previousText = "";
-            // TODO: Add events for numberchanged
+            var handler = NumericValueCleared;
+            if (handler != null)
+                handler.Invoke(this, new NumericValueClearedEventArgs());
         }
 
         private void HandleNumericValueChanged()
         {
             previousText = Text.ToString();
-            // TODO: Add events for numberchanged
+            var handler = NumericValueChanged;
+            if (handler != null)
+                handler.Invoke(this, new NumericValueChangedEventArgs(GetNumericValue()));
         }
 
         public void SetDefaultNumericValue(double defaultNumericValue, string defaultNumericFormat)
