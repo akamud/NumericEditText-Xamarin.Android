@@ -51,6 +51,12 @@ maxDigitsAfterDecimal | Sets the maximum number of digits after the decimal poin
 	num:maxDigitsAfterDecimal="4" />
 ```
 
+You can also change it programmatically
+```C#
+txtNumeric.MaxDigitsBeforeDecimal = 6;
+txtNumeric.MaxDigitsAfterDecimal = 4;
+```
+
 ### Events
 `NumericEditText` fires two events:  
 `NumericValueChanged` when the value typed is changed  
