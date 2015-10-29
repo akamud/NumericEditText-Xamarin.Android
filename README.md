@@ -13,11 +13,10 @@ PM> Install-Package NumericEditText-Xamarin.Android
 ```
 
 ## Using
-Add the `res-auto` namespace:
+ Add the `res-auto` namespace:
 ```XML
 xmlns:num="http://schemas.android.comas/apk/res-auto"
 ```
-
 Then you can just use the component like so:
 ```XML
 <br.com.akamud.NumericEditText 
@@ -27,6 +26,14 @@ Then you can just use the component like so:
 	android:inputType="number|numberDecimal" />
 ```
 
+To get the number typed without mask you can use the method `GetNumericValue()`:
+
+```C#
+double number = txtNumeric.GetNumericValue();
+```
+If the input is invalid it will return a `double.NaN`
+
+### Changing precision
 By default it uses 2 decimal digits and (virtually) infinite number digits, but you can change it to whatever you need using two attributes:  
 
 Attribute | Description | Default Value  
@@ -44,12 +51,24 @@ maxDigitsAfterDecimal | Sets the maximum number of digits after the decimal poin
 	num:maxDigitsAfterDecimal="4" />
 ```
 
-To get the number typed without mask you can use the method `GetNumericValue()`:
+### Events
+`NumericEditText` fires two events:  
+`NumericValueChanged` when the value typed is changed  
+`NumericValueCleared` when the input is cleared  
+You can use them like a regular event:
+
 ```C#
-double number = txtNumeric.GetNumericValue();
+txtNumeric.NumericValueCleared += (object sender, NumericValueClearedEventArgs e) => { 
+	// Value cleared
+};
+
+txtNumeric.NumericValueChanged += (object sender, NumericValueChangedEventArgs e) => { 
+	double newValue = e.NewValue;
+	// New value
+};
 ```
 
-### Examples  
+## Examples  
 Using `en-US` culture:  
 Input:
 ```
