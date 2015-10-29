@@ -174,7 +174,7 @@ namespace Akamud.Numericedittext
                 handler.Invoke(this, new NumericValueChangedEventArgs(GetNumericValue()));
         }
 
-        public void SetDefaultNumericValue(double defaultNumericValue, string defaultNumericFormat)
+        private void SetDefaultNumericValue(double defaultNumericValue, string defaultNumericFormat)
         {
             defaultText = string.Format(defaultNumericFormat, defaultNumericValue);
 
@@ -209,7 +209,7 @@ namespace Akamud.Numericedittext
             }
         }
 
-        public string ReplaceFirst(string text, string search, string replace)
+        private string ReplaceFirst(string text, string search, string replace)
         {
             int pos = text.IndexOf(search);
             if (pos < 0)
