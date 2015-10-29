@@ -21,17 +21,18 @@ namespace Akamud.Numericedittext
     [Register("br.com.akamud.NumericEditText")]
     public class NumericEditText : EditText
     {
+        public int MaxDigitsBeforeDecimal { get; set; }
+
+        public int MaxDigitsAfterDecimal { get; set; }
+
         private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
         private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        private const string LeadingZeroFilterRegex = "^0+(?!$)";
         private const int DefaultDigitsBeforeDecimal = 0;
         private const int DefaultDigitsAfterDecimal = 2;
-        private int maxDigitsBeforeDecimal;
-        private int maxDigitsAfterDecimal;
-
         private string defaultText = null;
         private string previousText = "";
         private string numberFilterRegex = "";
+        private const string LeadingZeroFilterRegex = "^0+(?!$)";
 
         public event EventHandler<NumericValueChangedEventArgs> NumericValueChanged;
         public event EventHandler<NumericValueClearedEventArgs> NumericValueCleared;
@@ -63,8 +64,8 @@ namespace Akamud.Numericedittext
 
             try
             {
-                maxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
-                maxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
+                MaxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
+                MaxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
             } finally
             {
                 attributes.Recycle();
@@ -109,13 +110,13 @@ namespace Akamud.Numericedittext
                 rightPart = splitText[1];
             }
 
-            if (maxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(groupingSeparator, "").Length > maxDigitsBeforeDecimal)
+            if (MaxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(groupingSeparator, "").Length > MaxDigitsBeforeDecimal)
             {
                 DiscardInput(previousText);
                 return;
             }
 
-            if (rightPart != null && rightPart.Length > maxDigitsAfterDecimal)
+            if (rightPart != null && rightPart.Length > MaxDigitsAfterDecimal)
             {
                 DiscardInput(previousText);
                 return;

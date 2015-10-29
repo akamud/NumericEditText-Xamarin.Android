@@ -28,6 +28,10 @@ namespace NumericEditTextsample
 			Button button2 = FindViewById<Button> (Resource.Id.myButton2);
 			NumericEditText txtNumeric = FindViewById<NumericEditText> (Resource.Id.txtNumeric);
 			NumericEditText txtNumericConstrained = FindViewById<NumericEditText> (Resource.Id.txtNumericConstrained);
+
+            // Precision can be changed at runtime
+//            txtNumeric.MaxDigitsBeforeDecimal = 4;
+//            txtNumeric.MaxDigitsAfterDecimal = 8;
 			
 			button.Click += delegate {
 				double value = txtNumeric.GetNumericValue();
