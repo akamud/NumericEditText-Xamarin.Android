@@ -48,6 +48,6 @@ Global
 		$5.inheritsSet = Mono
 		$5.inheritsScope = application/xml
 		$5.scope = application/xml
-		version = 1.0
+		version = 1.1
 	EndGlobalSection
 EndGlobal
