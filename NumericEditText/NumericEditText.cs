@@ -18,11 +18,22 @@ using Java.Text;
 
 namespace Akamud.Numericedittext
 {
+    /// <summary>
+    /// Numeric Edit Text that supports decimal separator and group separator according to your culture.
+    /// </summary>
     [Register("br.com.akamud.NumericEditText")]
     public class NumericEditText : EditText
     {
+        /// <summary>
+        /// Gets or sets the maximum number of digits before the decimal point.
+        /// </summary>
+        /// <value>The maximum number of digits before the decimal point</value>
         public int MaxDigitsBeforeDecimal { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum number of digits after the decimal point.
+        /// </summary>
+        /// <value>The maximum number of digits after the decimal point</value>
         public int MaxDigitsAfterDecimal { get; set; }
 
         private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
@@ -34,9 +45,21 @@ namespace Akamud.Numericedittext
         private string numberFilterRegex = "";
         private const string LeadingZeroFilterRegex = "^0+(?!$)";
 
+        /// <summary>
+        /// <para>Occurs when numeric value changed.</para>
+        /// <para>DOES NOT occur when the input is cleared.</para>
+        /// </summary>
         public event EventHandler<NumericValueChangedEventArgs> NumericValueChanged;
+
+        /// <summary>
+        /// Occurs when numeric value cleared.
+        /// </summary>
         public event EventHandler<NumericValueClearedEventArgs> NumericValueCleared;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// </summary>
+        /// <param name="context">Context</param>
         public NumericEditText(Context context)
             : base(context)
         {
@@ -44,6 +67,11 @@ namespace Akamud.Numericedittext
             InitComponent();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// </summary>
+        /// <param name="context">Context</param>
+        /// <param name="attrs">Attributes for component initialization</param>
         public NumericEditText(Context context, IAttributeSet attrs)
             : base(context, attrs)
         {
@@ -51,6 +79,12 @@ namespace Akamud.Numericedittext
             InitComponent();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// </summary>
+        /// <param name="context">Context</param>
+        /// <param name="attrs">Attributes for component initialization</param>
+        /// <param name="defStyleAttr">Style attributes for component initialization</param>
         public NumericEditText(Context context, IAttributeSet attrs, int defStyleAttr)
             : base(context, attrs, defStyleAttr)
         {
@@ -189,6 +223,9 @@ namespace Akamud.Numericedittext
             AfterTextChanged += TextChangedHandler;
         }
 
+        /// <summary>
+        /// Clears the text from the NumericEditText.
+        /// </summary>
         public void Clear()
         {
             SetTextInternal(defaultText != null ? defaultText : "");
@@ -198,6 +235,10 @@ namespace Akamud.Numericedittext
             }
         }
 
+        /// <summary>
+        /// Gets the double value represented by the text.
+        /// </summary>
+        /// <returns>The double value represented by the text</returns>
         public double GetNumericValue()
         {
             string original = Regex.Replace(Text.ToString(), numberFilterRegex, "");
