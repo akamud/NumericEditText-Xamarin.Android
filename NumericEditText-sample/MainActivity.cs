@@ -39,7 +39,7 @@ namespace NumericEditTextsample
 			};
 
 			button2.Click += delegate {
-				double value = txtNumericConstrained.GetNumericValue();
+                double value = txtNumericConstrained.GetNumericValueOrDefault();
 				Toast.MakeText(this, value.ToString(), ToastLength.Long).Show();
 			};
 

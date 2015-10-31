@@ -236,7 +236,7 @@ namespace Akamud.Numericedittext
         }
 
         /// <summary>
-        /// Gets the double value represented by the text.
+        /// Gets the double value represented by the text. Returns double.NaN if number is invalid
         /// </summary>
         /// <returns>The double value represented by the text</returns>
         public double GetNumericValue()
@@ -247,7 +247,23 @@ namespace Akamud.Numericedittext
                 return NumberFormat.Instance.Parse(original).DoubleValue();
             } catch (ParseException)
             {
-                return Double.NaN;
+                return double.NaN;
+            }
+        }
+
+        /// <summary>
+        /// Gets the double value represented by the text. Returns 0 if number is invalid
+        /// </summary>
+        /// <returns>The double value represented by the text</returns>
+        public double GetNumericValueOrDefault()
+        {
+            string original = Regex.Replace(Text.ToString(), numberFilterRegex, "");
+            try
+            {
+                return NumberFormat.Instance.Parse(original).DoubleValue();
+            } catch (ParseException)
+            {
+                return default(double);
             }
         }
 
