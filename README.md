@@ -26,12 +26,17 @@ Then you can just use the component like so:
 	android:inputType="number|numberDecimal" />
 ```
 
-To get the number typed without mask you can use the method `GetNumericValue()`:
+To get the number typed without mask you can use the method `GetNumericValue()`. If the input is invalid it will return a `double.NaN`.
 
 ```C#
 double number = txtNumeric.GetNumericValue();
 ```
-If the input is invalid it will return a `double.NaN`
+
+If you want it to return `0` when the input is invalid (like empty) you can use `GetNumericValueOrDefault()`:
+
+```C#
+double number = txtNumeric.GetNumericValueOrDefault();
+```
 
 ### Changing precision
 By default it uses 2 decimal digits and (virtually) infinite number digits, but you can change it to whatever you need using two attributes:  
