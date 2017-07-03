@@ -3,5 +3,7 @@
     <declare-styleable name="NumericEditText">
         <attr name="maxDigitsBeforeDecimal" format="integer" />
         <attr name="maxDigitsAfterDecimal" format="integer" />
+        <attr name="showCurrencySymbol" format="boolean" />
+        <attr name="overrideCurrencySymbol" format="string" />
     </declare-styleable>
 </resources>

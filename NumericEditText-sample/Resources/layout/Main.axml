@@ -23,8 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number|numberDecimal"
-        num:maxDigitsBeforeDecimal="6"
-        num:maxDigitsAfterDecimal="4" />
+        num:maxDigitsBeforeDecimal="2"
+        num:maxDigitsAfterDecimal="2"
+        num:showCurrencySymbol="True"
+        num:overrideCurrencySymbol="%" />
     <Button
         android:id="@+id/myButton2"
         android:layout_width="match_parent"

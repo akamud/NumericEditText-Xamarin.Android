@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumericEditText", "NumericEditText\NumericEditText.csproj", "{61586EDA-DA26-4632-B8C7-3227B154C464}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumericEditText-sample", "NumericEditText-sample\NumericEditText-sample.csproj", "{E76753B2-483F-4028-9D22-FC17CCBD9917}"
@@ -17,12 +19,16 @@ Global
 		{61586EDA-DA26-4632-B8C7-3227B154C464}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E76753B2-483F-4028-9D22-FC17CCBD9917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E76753B2-483F-4028-9D22-FC17CCBD9917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E76753B2-483F-4028-9D22-FC17CCBD9917}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{E76753B2-483F-4028-9D22-FC17CCBD9917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E76753B2-483F-4028-9D22-FC17CCBD9917}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
-		$0.TextStylePolicy = $1
+		$0.TextStylePolicy = $4
 		$1.inheritsSet = null
 		$1.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $2
@@ -36,12 +42,10 @@ Global
 		$2.inheritsSet = Mono
 		$2.inheritsScope = text/x-csharp
 		$2.scope = text/x-csharp
-		$0.TextStylePolicy = $3
 		$3.FileWidth = 120
 		$3.inheritsSet = VisualStudio
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
-		$0.TextStylePolicy = $4
 		$4.inheritsSet = null
 		$4.scope = application/xml
 		$0.XmlFormattingPolicy = $5
