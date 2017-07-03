@@ -28,10 +28,14 @@ namespace NumericEditTextsample
 		{
 			global::Akamud.Numericedittext.Resource.Attribute.maxDigitsAfterDecimal = global::NumericEditTextsample.Resource.Attribute.maxDigitsAfterDecimal;
 			global::Akamud.Numericedittext.Resource.Attribute.maxDigitsBeforeDecimal = global::NumericEditTextsample.Resource.Attribute.maxDigitsBeforeDecimal;
+			global::Akamud.Numericedittext.Resource.Attribute.overrideCurrencySymbol = global::NumericEditTextsample.Resource.Attribute.overrideCurrencySymbol;
+			global::Akamud.Numericedittext.Resource.Attribute.showCurrencySymbol = global::NumericEditTextsample.Resource.Attribute.showCurrencySymbol;
 			global::Akamud.Numericedittext.Resource.String.library_name = global::NumericEditTextsample.Resource.String.library_name;
 			global::Akamud.Numericedittext.Resource.Styleable.NumericEditText = global::NumericEditTextsample.Resource.Styleable.NumericEditText;
 			global::Akamud.Numericedittext.Resource.Styleable.NumericEditText_maxDigitsAfterDecimal = global::NumericEditTextsample.Resource.Styleable.NumericEditText_maxDigitsAfterDecimal;
 			global::Akamud.Numericedittext.Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal = global::NumericEditTextsample.Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal;
+			global::Akamud.Numericedittext.Resource.Styleable.NumericEditText_overrideCurrencySymbol = global::NumericEditTextsample.Resource.Styleable.NumericEditText_overrideCurrencySymbol;
+			global::Akamud.Numericedittext.Resource.Styleable.NumericEditText_showCurrencySymbol = global::NumericEditTextsample.Resource.Styleable.NumericEditText_showCurrencySymbol;
 		}
 		
 		public partial class Attribute
@@ -42,6 +46,12 @@ namespace NumericEditTextsample
 			
 			// aapt resource value: 0x7f010000
 			public const int maxDigitsBeforeDecimal = 2130771968;
+			
+			// aapt resource value: 0x7f010003
+			public const int overrideCurrencySymbol = 2130771971;
+			
+			// aapt resource value: 0x7f010002
+			public const int showCurrencySymbol = 2130771970;
 			
 			static Attribute()
 			{
@@ -137,13 +147,21 @@ namespace NumericEditTextsample
 			
 			public static int[] NumericEditText = new int[] {
 					2130771968,
-					2130771969};
+					2130771969,
+					2130771970,
+					2130771971};
 			
 			// aapt resource value: 1
 			public const int NumericEditText_maxDigitsAfterDecimal = 1;
 			
 			// aapt resource value: 0
 			public const int NumericEditText_maxDigitsBeforeDecimal = 0;
+			
+			// aapt resource value: 3
+			public const int NumericEditText_overrideCurrencySymbol = 3;
+			
+			// aapt resource value: 2
+			public const int NumericEditText_showCurrencySymbol = 2;
 			
 			static Styleable()
 			{

@@ -45,6 +45,8 @@ Attribute | Description | Default Value
 :----: | :-------: | :---------:  
 maxDigitsBeforeDecimal | Sets the maximum number of digits before the decimal point | 0 (infinite)   
 maxDigitsAfterDecimal | Sets the maximum number of digits after the decimal point | 2
+showCurrencySymbol | Sets the currency symbol visibility for the text value using current culture style | false
+
 
 ```XML
 <br.com.akamud.NumericEditText 
@@ -53,13 +55,15 @@ maxDigitsAfterDecimal | Sets the maximum number of digits after the decimal poin
 	android:layout_height="wrap_content"
 	android:inputType="number|numberDecimal"
 	num:maxDigitsBeforeDecimal="6"
-	num:maxDigitsAfterDecimal="4" />
+	num:maxDigitsAfterDecimal="4"
+    num:showCurrencySymbol="True" />
 ```
 
 You can also change it programmatically
 ```C#
 txtNumeric.MaxDigitsBeforeDecimal = 6;
 txtNumeric.MaxDigitsAfterDecimal = 4;
+txtNumeric.ShowCurrencySymbol = True;
 ```
 
 ### Events
@@ -83,7 +87,7 @@ txtNumeric.NumericValueChanged += (object sender, NumericValueChangedEventArgs e
 Using `en-US` culture:  
 Input:
 ```
-100,000.00
+$100,000.00
 ```
 Output:
 ```
@@ -101,6 +105,7 @@ Output:
 // double
 100000.00
 ```
+
 
 ## Gif examples
 ### en-US culture:

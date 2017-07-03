@@ -33,6 +33,12 @@ namespace Akamud.Numericedittext
 			// aapt resource value: 0x7f010000
 			public static int maxDigitsBeforeDecimal = 2130771968;
 			
+			// aapt resource value: 0x7f010003
+			public static int overrideCurrencySymbol = 2130771971;
+			
+			// aapt resource value: 0x7f010002
+			public static int showCurrencySymbol = 2130771970;
+			
 			static Attribute()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -64,13 +70,21 @@ namespace Akamud.Numericedittext
 			
 			public static int[] NumericEditText = new int[] {
 					2130771968,
-					2130771969};
+					2130771969,
+					2130771970,
+					2130771971};
 			
 			// aapt resource value: 1
 			public static int NumericEditText_maxDigitsAfterDecimal = 1;
 			
 			// aapt resource value: 0
 			public static int NumericEditText_maxDigitsBeforeDecimal = 0;
+			
+			// aapt resource value: 3
+			public static int NumericEditText_overrideCurrencySymbol = 3;
+			
+			// aapt resource value: 2
+			public static int NumericEditText_showCurrencySymbol = 2;
 			
 			static Styleable()
 			{

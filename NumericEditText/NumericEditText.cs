@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using Android.App;
 using Android.Content;
-using Android.Content.Res;
-using Android.OS;
 using Android.Runtime;
 using Android.Text;
 using Android.Text.Method;
 using Android.Util;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Text;
 
@@ -30,20 +26,40 @@ namespace Akamud.Numericedittext
         /// <value>The maximum number of digits before the decimal point</value>
         public int MaxDigitsBeforeDecimal { get; set; }
 
+
         /// <summary>
         /// Gets or sets the maximum number of digits after the decimal point.
         /// </summary>
         /// <value>The maximum number of digits after the decimal point</value>
         public int MaxDigitsAfterDecimal { get; set; }
 
-        private string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
-        private string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        /// <summary>
+        /// If flag is seted, string value will be with Currency symbol.
+        /// </summary>
+        public bool ShowCurrencySymbol { get; set; }
+
+        /// <summary>
+        /// If ShowCurrencySymbol sets to <b>True</b>, you can override the currency symbol to any other char
+        /// <remarks>
+        /// If you put more that 1 char, will using onlu first simbol
+        /// </remarks>
+        /// </summary>
+        public string OverrideCurrencySymbol { get; set; } = CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
+
+        private new static readonly string Tag = "X:" + typeof(NumericEditText).Name;
+
         private const int DefaultDigitsBeforeDecimal = 0;
         private const int DefaultDigitsAfterDecimal = 2;
-        private string defaultText = null;
-        private string previousText = "";
-        private string numberFilterRegex = "";
+        private const bool DefaultShowCurrencySymbol = false;
         private const string LeadingZeroFilterRegex = "^0+(?!$)";
+        private const string AcceptedKeys = "0123456789,.";
+
+        private readonly string _groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
+        private readonly string _decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        private readonly int _currencyPositivePattern = CultureInfo.CurrentCulture.NumberFormat.CurrencyPositivePattern;
+
+        private string _previousText = string.Empty;
+        private string _numberFilterRegex = string.Empty;
 
         /// <summary>
         /// <para>Occurs when numeric value changed.</para>
@@ -57,7 +73,7 @@ namespace Akamud.Numericedittext
         public event EventHandler<NumericValueClearedEventArgs> NumericValueCleared;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// Initializes a new instance of the <see cref="NumericEditText"/> class.
         /// </summary>
         /// <param name="context">Context</param>
         public NumericEditText(Context context)
@@ -68,7 +84,7 @@ namespace Akamud.Numericedittext
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// Initializes a new instance of the <see cref="NumericEditText"/> class.
         /// </summary>
         /// <param name="context">Context</param>
         /// <param name="attrs">Attributes for component initialization</param>
@@ -80,7 +96,7 @@ namespace Akamud.Numericedittext
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Akamud.Numericedittext.NumericEditText"/> class.
+        /// Initializes a new instance of the <see cref="NumericEditText"/> class.
         /// </summary>
         /// <param name="context">Context</param>
         /// <param name="attrs">Attributes for component initialization</param>
@@ -92,15 +108,67 @@ namespace Akamud.Numericedittext
             InitComponent();
         }
 
+        /// <summary>
+        /// Clears the text from the NumericEditText.
+        /// </summary>
+        public void Clear()
+        {
+            SetTextInternal(string.Empty);
+            HandleNumericValueChanged();
+        }
+
+        /// <summary>
+        /// Gets the double value represented by the text. Returns double.NaN if number is invalid
+        /// </summary>
+        /// <returns>The double value represented by the text</returns>
+        public double GetNumericValue()
+        {
+            var original = Regex.Replace(Text, _numberFilterRegex, string.Empty);
+            try
+            {
+                return NumberFormat.Instance.Parse(original).DoubleValue();
+            }
+            catch (ParseException ex)
+            {
+                Log.Debug(Tag, ex.Message);
+                return double.NaN;
+            }
+        }
+
+        /// <summary>
+        /// Gets the double value represented by the text. Returns 0 if number is invalid
+        /// </summary>
+        /// <returns>The double value represented by the text</returns>
+        public double GetNumericValueOrDefault()
+        {
+            var original = Regex.Replace(Text, _numberFilterRegex, string.Empty);
+            try
+            {
+                return NumberFormat.Instance.Parse(original).DoubleValue();
+            }
+            catch (ParseException ex)
+            {
+                Log.Debug(Tag, ex.Message);
+                return default(double);
+            }
+        }
+
         private void InitAttrs(Context context, IAttributeSet attrs, int defStyleAttr)
         {
-            TypedArray attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
+            var attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.NumericEditText, defStyleAttr, 0);
 
             try
             {
                 MaxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, DefaultDigitsBeforeDecimal);
                 MaxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, DefaultDigitsAfterDecimal);
-            } finally
+                ShowCurrencySymbol = attributes.GetBoolean(Resource.Styleable.NumericEditText_showCurrencySymbol, DefaultShowCurrencySymbol);
+                OverrideCurrencySymbol = attributes.GetString(Resource.Styleable.NumericEditText_overrideCurrencySymbol).FirstOrDefault().ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(Tag, ex.Message);
+            }
+            finally
             {
                 attributes.Recycle();
             }
@@ -108,71 +176,82 @@ namespace Akamud.Numericedittext
 
         private void InitComponent()
         {
-            numberFilterRegex = "[^\\d\\" + decimalSeparator + "]";
+            _numberFilterRegex = "[^\\d\\" + _decimalSeparator + "]";
             AfterTextChanged += TextChangedHandler;
-            Click += (object sender, EventArgs e) => {
+            Click += (sender, e) =>
+            {
                 SetSelection(Text.Length);
             };
-            KeyListener = DigitsKeyListener.GetInstance("0123456789,.");
+            KeyListener = DigitsKeyListener.GetInstance(AcceptedKeys);
         }
 
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
         {
-            string newText = e.Editable.ToString();
+            var newText = e.Editable.ToString();
 
-            int decimalPointPosition = e.Editable.ToString().IndexOf(decimalSeparator);
+            if (newText == OverrideCurrencySymbol)
+            {
+                Clear();
+                return;
+            }
+
+            var decimalPointPosition = e.Editable.ToString().IndexOf(_decimalSeparator, StringComparison.CurrentCulture);
             if (decimalPointPosition > 0)
             {
-                if (newText.Substring(decimalPointPosition).IndexOf(groupingSeparator) > 0)
+                if (newText.Substring(decimalPointPosition).IndexOf(_groupingSeparator, StringComparison.CurrentCulture) > 0)
                 {
-                    DiscardInput(previousText);
+                    DiscardInput(_previousText);
                     return;
                 }
             }
 
-            if (newText.Length == 1 && newText == decimalSeparator)
+            if (newText.Length == 1 && newText == _decimalSeparator)
             {
-                DiscardInput(previousText);
+                DiscardInput(_previousText);
                 return;
             }
 
-            string[] splitText = newText.Split(decimalSeparator.ToCharArray());
-            string leftPart = splitText[0];
+            var splitText = newText.Split(_decimalSeparator.ToCharArray());
+            var leftPart = splitText[0];
             string rightPart = null;
             if (splitText.Length > 1)
             {
                 rightPart = splitText[1];
+                rightPart = rightPart.Replace(OverrideCurrencySymbol, string.Empty);
             }
 
-            if (MaxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(groupingSeparator, "").Length > MaxDigitsBeforeDecimal)
+            if (MaxDigitsBeforeDecimal > 0 && leftPart != null && 
+                    leftPart.Replace(_groupingSeparator, string.Empty)
+                    .Replace(OverrideCurrencySymbol, string.Empty)
+                    .Length > MaxDigitsBeforeDecimal)
             {
-                DiscardInput(previousText);
+                DiscardInput(_previousText);
                 return;
             }
 
             if (rightPart != null && rightPart.Length > MaxDigitsAfterDecimal)
             {
-                DiscardInput(previousText);
+                DiscardInput(_previousText);
                 return;
             }
 
             if (newText.Length > 2)
             {
-                string lastChar = newText[newText.Length - 1].ToString();
-                string secToLastChar = newText[newText.Length - 2].ToString();
-                if (lastChar == decimalSeparator || lastChar == groupingSeparator)
+                var lastChar = newText[newText.Length - 1].ToString();
+                var secToLastChar = newText[newText.Length - 2].ToString();
+                if (lastChar == _decimalSeparator || lastChar == _groupingSeparator)
                 {
                     if (lastChar == secToLastChar)
                     {
-                        DiscardInput(previousText);
+                        DiscardInput(_previousText);
                         return;
                     }
                 }
             }
 
-            if (CountMatches(e.Editable.ToString(), decimalSeparator.ToString()) > 1)
+            if (CountMatches(e.Editable.ToString(), _decimalSeparator) > 1)
             {
-                DiscardInput(previousText);
+                DiscardInput(_previousText);
                 return;
             }
 
@@ -195,81 +274,63 @@ namespace Akamud.Numericedittext
 
         private void HandleNumericValueCleared()
         {
-            previousText = "";
+            _previousText = string.Empty;
             var handler = NumericValueCleared;
-            if (handler != null)
-                handler.Invoke(this, new NumericValueClearedEventArgs());
+            handler?.Invoke(this, new NumericValueClearedEventArgs());
         }
 
         private void HandleNumericValueChanged()
         {
-            previousText = Text.ToString();
+            _previousText = Text;
             var handler = NumericValueChanged;
-            if (handler != null)
-                handler.Invoke(this, new NumericValueChangedEventArgs(GetNumericValue()));
+            handler?.Invoke(this, new NumericValueChangedEventArgs(GetNumericValue()));
         }
-
-        private void SetDefaultNumericValue(double defaultNumericValue, string defaultNumericFormat)
-        {
-            defaultText = string.Format(defaultNumericFormat, defaultNumericValue);
-
-            SetTextInternal(defaultText);
-        }
-
+        
         private void SetTextInternal(string text)
         {
             AfterTextChanged -= TextChangedHandler;
             Text = text;
             AfterTextChanged += TextChangedHandler;
         }
-
-        /// <summary>
-        /// Clears the text from the NumericEditText.
-        /// </summary>
-        public void Clear()
+        
+        private string Format(string original)
         {
-            SetTextInternal(defaultText != null ? defaultText : "");
-            if (defaultText != null)
+            var parts = original.Split(_decimalSeparator.ToCharArray());
+            var number = Regex.Replace(parts[0], _numberFilterRegex, string.Empty);
+            number = ReplaceFirst(number, LeadingZeroFilterRegex, string.Empty);
+
+            number = Reverse(Regex.Replace(Reverse(number), "(.{3})", "$1" + _groupingSeparator));
+
+            number = RemoveStart(number, _groupingSeparator);
+
+            if (parts.Length > 1)
             {
-                HandleNumericValueChanged();
+                number += _decimalSeparator + parts[1];
+            }
+
+            if (!ShowCurrencySymbol)
+            {
+                return number;
+            }
+
+            switch (_currencyPositivePattern)
+            {
+                case 0:
+                    return $"{OverrideCurrencySymbol}{number}";
+                case 1:
+                    return $"{number}{OverrideCurrencySymbol}";
+                case 2:
+                    return $"{OverrideCurrencySymbol} {number}";
+                case 3:
+                    return $"{number} {OverrideCurrencySymbol}";
+                default:
+                    return number;
             }
         }
 
-        /// <summary>
-        /// Gets the double value represented by the text. Returns double.NaN if number is invalid
-        /// </summary>
-        /// <returns>The double value represented by the text</returns>
-        public double GetNumericValue()
+        private static string ReplaceFirst(string text, string search, string replace)
         {
-            string original = Regex.Replace(Text.ToString(), numberFilterRegex, "");
-            try
-            {
-                return NumberFormat.Instance.Parse(original).DoubleValue();
-            } catch (ParseException)
-            {
-                return double.NaN;
-            }
-        }
-
-        /// <summary>
-        /// Gets the double value represented by the text. Returns 0 if number is invalid
-        /// </summary>
-        /// <returns>The double value represented by the text</returns>
-        public double GetNumericValueOrDefault()
-        {
-            string original = Regex.Replace(Text.ToString(), numberFilterRegex, "");
-            try
-            {
-                return NumberFormat.Instance.Parse(original).DoubleValue();
-            } catch (ParseException)
-            {
-                return default(double);
-            }
-        }
-
-        private string ReplaceFirst(string text, string search, string replace)
-        {
-            int pos = text.IndexOf(search);
+            var pos = text.IndexOf(search, StringComparison.CurrentCulture);
             if (pos < 0)
             {
                 return text;
@@ -277,34 +338,19 @@ namespace Akamud.Numericedittext
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
-        private string Format(string original)
-        {
-            string[] parts = original.Split(decimalSeparator.ToCharArray());
-            String number = Regex.Replace(parts[0], numberFilterRegex, "");
-            number = ReplaceFirst(number, LeadingZeroFilterRegex, "");
-
-            number = Reverse(Regex.Replace(Reverse(number), "(.{3})", "$1" + groupingSeparator));
-
-            number = RemoveStart(number, groupingSeparator.ToString());
-
-            if (parts.Length > 1)
-            {
-                number += decimalSeparator + parts[1];
-            }
-
-            return number;
-        }
-
-        private string Reverse(string original)
+        private static string Reverse(string original)
         {
             if (original == null || original.Length <= 1)
             {
                 return original;
             }
-            return TextUtils.GetReverse(original, 0, original.Length).ToString();
+
+            var c = original.ToCharArray();
+            Array.Reverse(c);
+            return new string(c);
         }
 
-        private string RemoveStart(string str, string remove)
+        private static string RemoveStart(string str, string remove)
         {
             if (TextUtils.IsEmpty(str))
             {
@@ -317,20 +363,18 @@ namespace Akamud.Numericedittext
             return str;
         }
 
-        private int CountMatches(string str, string sub)
+        private static int CountMatches(string str, string sub)
         {
             if (TextUtils.IsEmpty(str))
             {
                 return 0;
             }
-            int lastIndex = str.LastIndexOf(sub);
+            var lastIndex = str.LastIndexOf(sub, StringComparison.CurrentCulture);
             if (lastIndex < 0)
             {
                 return 0;
-            } else
-            {
-                return 1 + CountMatches(str.Substring(0, lastIndex), sub);
             }
+            return 1 + CountMatches(str.Substring(0, lastIndex), sub);
         }
     }
 }
